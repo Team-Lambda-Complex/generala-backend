@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.type.NumericBooleanConverter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.util.Set;
@@ -17,6 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "match")
+@EntityListeners(AuditingEntityListener.class)
 public class Match {
     // Attributes
     @Id

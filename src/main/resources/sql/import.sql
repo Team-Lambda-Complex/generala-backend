@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `player`;
 CREATE TABLE `player` (
    `id` INT AUTO_INCREMENT,
    `name` VARCHAR(50) NOT NULL,
@@ -10,6 +11,7 @@ CREATE TABLE `player` (
    PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `match`;
 CREATE TABLE `match` (
    `id` INT AUTO_INCREMENT,
    `owner_id` INT NOT NULL,
@@ -19,6 +21,7 @@ CREATE TABLE `match` (
    PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `play_type`;
 CREATE TABLE `play_type` (
    `id` INT AUTO_INCREMENT,
    `name` VARCHAR(50) NOT NULL,
@@ -26,6 +29,7 @@ CREATE TABLE `play_type` (
    PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `play`;
 CREATE TABLE `play` (
    `id` INT AUTO_INCREMENT,
    `type_id` INT NOT NULL,
@@ -38,6 +42,7 @@ CREATE TABLE `play` (
    PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `match_player`;
 CREATE TABLE `match_player` (
    `id` INT AUTO_INCREMENT,
    `match_id` INT NOT NULL,
