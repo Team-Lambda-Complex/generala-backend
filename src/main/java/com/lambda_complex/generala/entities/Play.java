@@ -1,33 +1,30 @@
 package com.lambda_complex.generala.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.type.NumericBooleanConverter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
-@Table(name = "player")
-//@ToString
-public class Player {
+@Table(name = "play")
+public class Play {
     // Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
-    private String password;
-    @Column(name = "is_registered")
+    @Column(name = "is_served")
     @Convert(converter = NumericBooleanConverter.class)
-    private Boolean isRegistered;
-    @Column(name = "registration_date")
-    private Instant registrationDate;
+    private Boolean isServed;
+    private int points;
 
     // Timestamps
     @CreatedDate
@@ -38,10 +35,13 @@ public class Player {
     private Instant modificationDate;
 
     // Relations
-    @OneToMany(mappedBy = "owner", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    private Set<Match> matchesOwned;
-    @OneToMany(mappedBy = "player", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    private Set<MatchPlayer> matchesPlayedIn;
-    @OneToMany(mappedBy = "player", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    private Set<Play> plays;
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private PlayType type;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    @JoinColumn(name = "match_id", nullable = false)
+    private Match match;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    @JoinColumn(name = "player_id", nullable = false)
+    private Player player;
 }

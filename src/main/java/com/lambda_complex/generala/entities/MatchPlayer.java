@@ -5,26 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.type.NumericBooleanConverter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
-import java.util.Set;
 
 @Entity
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "match")
-public class Match {
+@Table(name = "match_player")
+public class MatchPlayer {
     // Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "is_active")
-    @Convert(converter = NumericBooleanConverter.class)
-    private Boolean isActive;
+    private int score;
 
     // Timestamps
     @CreatedDate
@@ -36,10 +32,9 @@ public class Match {
 
     // Relations
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    @JoinColumn(name = "owner_id", nullable = false)
-    private Player owner;
-    @OneToMany(mappedBy = "match", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    private Set<MatchPlayer> players;
-    @OneToMany(mappedBy = "match", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
-    private Set<Play> plays;
+    @JoinColumn(name = "match_id", nullable = false)
+    private Match match;
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
+    @JoinColumn(name = "player_id", nullable = false)
+    private Player player;
 }
