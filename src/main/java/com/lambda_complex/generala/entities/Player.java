@@ -46,4 +46,13 @@ public class Player {
     private Set<MatchPlayer> matchesPlayedIn;
     @OneToMany(mappedBy = "player", cascade = { CascadeType.PERSIST, CascadeType.REFRESH })
     private Set<Play> plays;
+
+
+    // creation instance constructor
+    public Player (String name, String email, String password){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.isRegistered = false; // Por defecto es false
+    }
 }

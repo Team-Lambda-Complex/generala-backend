@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS "player";
 CREATE TABLE "player" (
    "id" INT AUTO_INCREMENT,
    "name" VARCHAR(50) NOT NULL,
-   "email" VARCHAR(70) NOT NULL,
+   "email" VARCHAR(70) NOT NULL UNIQUE,
    "password" VARCHAR(255),
    "is_registered" TINYINT NOT NULL DEFAULT 0,
    "registration_date" TIMESTAMP,
@@ -24,7 +24,7 @@ CREATE TABLE "match" (
 DROP TABLE IF EXISTS "play_type";
 CREATE TABLE "play_type" (
    "id" INT AUTO_INCREMENT,
-   "name" VARCHAR(50) NOT NULL,
+   "name" VARCHAR(50) NOT NULL UNIQUE,
    "base_points" INT NOT NULL,
    PRIMARY KEY ("id")
 );
