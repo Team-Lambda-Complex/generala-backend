@@ -17,10 +17,27 @@ public class PlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPlayer(@Valid @RequestBody ReqPlayerDto reqPlayerDto){
+    public ResponseEntity<SuccessfullyResponseDto> createPlayer(@Valid @RequestBody ReqPlayerDto reqPlayerDto){
+
         return new ResponseEntity<>(
-                playerService.createPlayer(reqPlayerDto),
+                new SuccessfullyResponseDto(
+                        true,
+                        "Player successfully created",
+                        playerService.createPlayer(reqPlayerDto)
+                ),
                 HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<SuccessfullyResponseDto> getAllPlayers(){
+        return new ResponseEntity<>(
+                new SuccessfullyResponseDto(
+                        true,
+                        "Success",
+                        playerService.findAll()
+                ),
+                HttpStatus.OK
         );
     }
 

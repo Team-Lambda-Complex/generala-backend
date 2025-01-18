@@ -7,6 +7,8 @@ import com.lambda_complex.generala.repositories.interfaces.IPlayerRepository;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PlayerService implements IPlayerService {
     private IPlayerRepository playerRepository;
@@ -32,5 +34,21 @@ public class PlayerService implements IPlayerService {
                 savedPlayer.getCreationDate(),
                 savedPlayer.getModificationDate()
         );
+    }
+
+    @Override
+    public List<PlayerDto> findAll() {
+        List<Player> allPlayers = playerRepository.findAll();
+
+        return allPlayers.stream().map( player ->
+                new PlayerDto(
+                        player.getId(),
+                        player.getName(),
+                        player.getEmail(),
+                        player.getIsRegistered(),
+                        player.getRegistrationDate(),
+                        player.getCreationDate(),
+                        player.getModificationDate()
+                ) ).toList();
     }
 }
