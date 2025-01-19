@@ -3,12 +3,10 @@ package com.lambda_complex.generala.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
-public class SuccessfullyResponseDto {
+public class SuccessResponseDto <T> {
     private boolean ok;
     private String message;
-    private Object data;
+    private T data;
 }

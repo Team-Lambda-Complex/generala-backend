@@ -1,12 +1,15 @@
 package com.lambda_complex.generala.controllers;
 
+import com.lambda_complex.generala.dto.PlayerDto;
 import com.lambda_complex.generala.dto.request.ReqPlayerDto;
-import com.lambda_complex.generala.dto.response.SuccessfullyResponseDto;
+import com.lambda_complex.generala.dto.response.SuccessResponseDto;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/players")
@@ -17,10 +20,10 @@ public class PlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<SuccessfullyResponseDto> createPlayer(@Valid @RequestBody ReqPlayerDto reqPlayerDto){
+    public ResponseEntity<SuccessResponseDto<PlayerDto>> createPlayer(@Valid @RequestBody ReqPlayerDto reqPlayerDto){
 
         return new ResponseEntity<>(
-                new SuccessfullyResponseDto(
+                new SuccessResponseDto<>(
                         true,
                         "Player successfully created",
                         playerService.createPlayer(reqPlayerDto)
@@ -30,9 +33,9 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<SuccessfullyResponseDto> getAllPlayers(){
+    public ResponseEntity<SuccessResponseDto<List<PlayerDto>>> getAllPlayers(){
         return new ResponseEntity<>(
-                new SuccessfullyResponseDto(
+                new SuccessResponseDto<>(
                         true,
                         "Success",
                         playerService.findAll()
