@@ -5,6 +5,8 @@ import com.lambda_complex.generala.dto.request.ReqPlayerDto;
 import com.lambda_complex.generala.entities.Player;
 import com.lambda_complex.generala.repositories.interfaces.IPlayerRepository;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,39 +18,24 @@ public class PlayerService implements IPlayerService {
         this.playerRepository = playerRepository;
     }
 
+    @Autowired
+    ModelMapper mapper;
+
     @Override
     public PlayerDto createPlayer(ReqPlayerDto reqPlayerDto) {
 
-        Player savedPlayer = playerRepository.save(new Player(
-                reqPlayerDto.getName(),
-                reqPlayerDto.getEmail(),
-                reqPlayerDto.getPassword()
-        ));
+        Player newPlayer = mapper.map(reqPlayerDto, Player.class);
+        newPlayer.setIsRegistered(false);
 
-        return new PlayerDto(
-                savedPlayer.getId(),
-                savedPlayer.getName(),
-                savedPlayer.getEmail(),
-                savedPlayer.getIsRegistered(),
-                savedPlayer.getRegistrationDate(),
-                savedPlayer.getCreationDate(),
-                savedPlayer.getModificationDate()
-        );
+        Player savedPlayer = playerRepository.save(newPlayer);
+
+        return mapper.map(savedPlayer, PlayerDto.class);
     }
 
     @Override
     public List<PlayerDto> findAll() {
         List<Player> allPlayers = playerRepository.findAll();
 
-        return allPlayers.stream().map( player ->
-                new PlayerDto(
-                        player.getId(),
-                        player.getName(),
-                        player.getEmail(),
-                        player.getIsRegistered(),
-                        player.getRegistrationDate(),
-                        player.getCreationDate(),
-                        player.getModificationDate()
-                ) ).toList();
+        return allPlayers.stream().map( player ->  mapper.map(player, PlayerDto.class) ).toList();
     }
 }
