@@ -3,8 +3,10 @@ package com.lambda_complex.generala.services;
 import com.lambda_complex.generala.dto.PlayerDto;
 import com.lambda_complex.generala.dto.request.ReqPlayerDto;
 import com.lambda_complex.generala.entities.Player;
+import com.lambda_complex.generala.helpers.TestSubjects;
 import com.lambda_complex.generala.repositories.interfaces.IPlayerRepository;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +29,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class PlayerServiceTest {
+
+    private ModelMapper modelMapper;
 
     @Mock
     private ModelMapper mapper;
@@ -35,39 +41,24 @@ public class PlayerServiceTest {
     @InjectMocks
     private PlayerService playerService;
 
+    @BeforeEach
+    void setUp() {
+        modelMapper = new ModelMapper();
+    }
+
     @Test
     @DisplayName("Player creation success")
     void createPlayerTest(){
         // Arrange
-        String name = "Carlitos Testy";
-        String email = "ct@test.com";
-        String password = "qwerty";
-
-        ReqPlayerDto exampleDto = new ReqPlayerDto(name, email, password);
-
-        Player expectedPlayer = new Player(
-                1L, // ID generado por la base de datos o mock
-                name,
-                email,
-                password,
-                false, // isRegistered
-                null, // registrationDate
-                null, // creationDate
-                null, // modificationDate
-                null, // matchesOwned
-                null, // matchesPlayedIn
-                null  // plays
+        ReqPlayerDto exampleDto = new ReqPlayerDto(
+                TestSubjects.player1.getName(),
+                TestSubjects.player1.getEmail(),
+                TestSubjects.player1.getPassword()
         );
 
-        PlayerDto exampleResultDto = new PlayerDto(
-                null,
-                name,
-                email,
-                false,
-                null,
-                null,
-                null
-        );
+        Player expectedPlayer = TestSubjects.player1;
+
+        PlayerDto exampleResultDto = modelMapper.map(TestSubjects.player1, PlayerDto.class);
 
         when(mapper.map(exampleDto, Player.class)).thenReturn(expectedPlayer);
         when(mapper.map(expectedPlayer, PlayerDto.class)).thenReturn(exampleResultDto);
@@ -78,9 +69,37 @@ public class PlayerServiceTest {
 
         // Assert
         System.out.println(result);
-        assertEquals(name, result.getName());
-        assertEquals(email, result.getEmail());
+        assertEquals(TestSubjects.player1.getName(), result.getName());
+        assertEquals(TestSubjects.player1.getEmail(), result.getEmail());
         assertFalse(result.getIsRegistered());
+    }
+
+    @Test
+    @DisplayName("Players successfully obtained")
+    void getAllPlayersTest(){
+        // Arrange
+        List<Player> payersList = new ArrayList<>();
+        payersList.add(TestSubjects.player1);
+        payersList.add(TestSubjects.player2);
+        payersList.add(TestSubjects.player3);
+
+        List<PlayerDto> expectedPlayerDtoList = new ArrayList<>();
+        expectedPlayerDtoList.add(modelMapper.map(TestSubjects.player1, PlayerDto.class));
+        expectedPlayerDtoList.add(modelMapper.map(TestSubjects.player2, PlayerDto.class));
+        expectedPlayerDtoList.add(modelMapper.map(TestSubjects.player3, PlayerDto.class));
+        // Act
+        when(mapper.map(payersList.get(0), PlayerDto.class)).thenReturn(expectedPlayerDtoList.get(0));
+        when(mapper.map(payersList.get(1), PlayerDto.class)).thenReturn(expectedPlayerDtoList.get(1));
+        when(mapper.map(payersList.get(2), PlayerDto.class)).thenReturn(expectedPlayerDtoList.get(2));
+
+        when(playerRepository.findAll()).thenReturn(payersList);
+
+        List<PlayerDto> resultPlayersList = playerService.findAll();
+        // Assert
+        assertEquals(resultPlayersList.size(), expectedPlayerDtoList.size());
+        assertEquals(resultPlayersList.get(0), expectedPlayerDtoList.get(0));
+        assertEquals(resultPlayersList.get(1), expectedPlayerDtoList.get(1));
+        assertEquals(resultPlayersList.get(2), expectedPlayerDtoList.get(2));
     }
 
 
