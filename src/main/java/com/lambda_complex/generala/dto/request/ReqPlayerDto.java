@@ -2,6 +2,7 @@ package com.lambda_complex.generala.dto.request;
 
 import com.lambda_complex.generala.constants.ValidationConstraints;
 import com.lambda_complex.generala.constants.ValidationMessages;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,6 +31,7 @@ public class ReqPlayerDto {
             max= ValidationConstraints.MAX_EMAIL_CHARS,
             message = ValidationMessages.EMAIL_SIZE
     )
+    @Email(message = ValidationMessages.EMAIL_FORMAT)
     private String email;
 
     @NotNull(message= ValidationMessages.REQUIRED)

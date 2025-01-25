@@ -7,4 +7,5 @@ public class ValidationMessages {
     public static final String NAME_SIZE = "must be between "+ ValidationConstraints.MIN_NAME_CHARS +" y "+ValidationConstraints.MAX_NAME_CHARS+" caracteres";
     public static final String PASS_SIZE = "must be between "+ ValidationConstraints.MIN_PASS_CHARS +" y "+ValidationConstraints.MAX_PASS_CHARS+" caracteres";
     public static final String EMAIL_SIZE = "must have a maximum of "+ValidationConstraints.MAX_EMAIL_CHARS+" caracteres";
+    public static final String EMAIL_FORMAT = "must have a valid email format";
 }

@@ -1,7 +1,9 @@
 package com.lambda_complex.generala.exceptions;
 
+import com.lambda_complex.generala.dto.response.ErrorDto;
 import com.lambda_complex.generala.dto.response.ValidationErrorDto;
 import com.lambda_complex.generala.enums.Status;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,23 +17,51 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorDto> handleValidationExceptions(MethodArgumentNotValidException ex){
+    public ResponseEntity<ErrorDto<List<ValidationErrorDto>>> handleValidationExceptions(MethodArgumentNotValidException ex){
         BindingResult result = ex.getBindingResult();
-        List<String> errorsList = new ArrayList<>();
+        List<ValidationErrorDto> errorsList = new ArrayList<>();
 
         for (FieldError error : result.getFieldErrors()) {
             if (error.getDefaultMessage() != null){
-                errorsList.add(error.getField() + ": " + error.getDefaultMessage());
+                errorsList.add( new ValidationErrorDto(
+                        error.getField(),
+                        error.getDefaultMessage(),
+                        (String) error.getRejectedValue()
+                ));
             }
         }
 
         return new ResponseEntity<>(
-                new ValidationErrorDto(
+                new ErrorDto<>(
                         false,
-                        Status.ERROR,
                         "Validation Error",
                         errorsList
                 ), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorDto<?>> handleEmailAlreadyExist(EmailAlreadyExistsException ex){
+        return new ResponseEntity<>(
+                new ErrorDto<>(
+                        false,
+                        ex.getMessage(),
+                        new ValidationErrorDto(
+                                "email",
+                                ex.getMessage(),
+                                ex.getValue()
+                        )
+                ), HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorDto<String>> handleIntegrityViolations(DataIntegrityViolationException ex){
+        return new ResponseEntity<>(new ErrorDto<>(
+                false,
+                "Integrity Violation",
+                ex.getMessage()
+        ), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

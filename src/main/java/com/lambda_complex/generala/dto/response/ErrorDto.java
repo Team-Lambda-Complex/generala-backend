@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SuccessResponseDto <T> {
+public class ErrorDto<T> {
     private boolean success;
     private String message;
-    private T data;
+    private T errors;
 }
