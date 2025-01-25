@@ -44,4 +44,6 @@ public class PlayerService implements IPlayerService {
 
         return allPlayers.stream().map( player ->  mapper.map(player, PlayerDto.class) ).toList();
     }
+
+    // TODO: Find by email para loggear
 }
