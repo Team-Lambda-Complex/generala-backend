@@ -64,4 +64,13 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         ), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(PlayerNotFoundException.class)
+    public ResponseEntity<ErrorDto<String>> handlePlayerNotFound(PlayerNotFoundException ex){
+        return new ResponseEntity<>(new ErrorDto<>(
+                false,
+                "Player not found",
+                ex.getMessage()
+        ), HttpStatus.NOT_FOUND);
+    }
 }

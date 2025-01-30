@@ -4,6 +4,7 @@ import com.lambda_complex.generala.dto.PlayerDto;
 import com.lambda_complex.generala.dto.request.ReqPlayerDto;
 import com.lambda_complex.generala.dto.response.SuccessResponseDto;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,12 @@ public class PlayerController {
                 HttpStatus.OK
         );
     }
+
+//    @GetMapping("/test")
+//    public ResponseEntity<?> test(@Nullable @RequestParam String email, @Nullable @RequestParam String password){
+//        PlayerDto jugador = playerService.findByEmailAndPassword(email, password);
+//
+//        return new ResponseEntity<>(jugador, HttpStatus.OK);
+//    }
 
 }

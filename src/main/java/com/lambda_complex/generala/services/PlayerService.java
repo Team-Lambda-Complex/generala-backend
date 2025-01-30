@@ -4,6 +4,7 @@ import com.lambda_complex.generala.dto.PlayerDto;
 import com.lambda_complex.generala.dto.request.ReqPlayerDto;
 import com.lambda_complex.generala.entities.Player;
 import com.lambda_complex.generala.exceptions.EmailAlreadyExistsException;
+import com.lambda_complex.generala.exceptions.PlayerNotFoundException;
 import com.lambda_complex.generala.repositories.interfaces.IPlayerRepository;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
 import org.modelmapper.ModelMapper;
@@ -45,5 +46,14 @@ public class PlayerService implements IPlayerService {
         return allPlayers.stream().map( player ->  mapper.map(player, PlayerDto.class) ).toList();
     }
 
-    // TODO: Find by email para loggear
+    @Override
+    public PlayerDto findByEmailAndPassword(String email, String password) {
+        Optional<Player> exists = playerRepository.findByEmailAndPassword(email, password);
+
+        if (exists.isEmpty()) throw new PlayerNotFoundException("Player not found");
+
+        System.out.println(exists);
+
+        return mapper.map(exists, PlayerDto.class);
+    }
 }

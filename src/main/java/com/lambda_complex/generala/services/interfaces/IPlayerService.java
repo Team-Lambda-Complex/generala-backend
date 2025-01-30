@@ -8,4 +8,5 @@ import java.util.List;
 public interface IPlayerService {
     public PlayerDto createPlayer(ReqPlayerDto reqPlayerDto);
     public List<PlayerDto> findAll();
+    public PlayerDto findByEmailAndPassword(String email, String password);
 }

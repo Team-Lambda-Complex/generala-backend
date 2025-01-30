@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface IPlayerRepository extends JpaRepository<Player, Long> {
     Optional<Player> findByEmail(String email);
+    Optional<Player> findByEmailAndPassword(String email, String password);
 }
