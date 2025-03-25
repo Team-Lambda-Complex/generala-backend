@@ -1,6 +1,7 @@
 package com.lambda_complex.generala.exceptions;
 
 import com.lambda_complex.generala.dto.response.ErrorDto;
+import com.lambda_complex.generala.dto.response.KeyValueDto;
 import com.lambda_complex.generala.dto.response.ValidationErrorDto;
 import com.lambda_complex.generala.enums.Status;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -66,11 +67,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(PlayerNotFoundException.class)
-    public ResponseEntity<ErrorDto<String>> handlePlayerNotFound(PlayerNotFoundException ex){
+    public ResponseEntity<ErrorDto<KeyValueDto>> handlePlayerNotFound(PlayerNotFoundException ex){
         return new ResponseEntity<>(new ErrorDto<>(
                 false,
                 "Player not found",
-                ex.getMessage()
+                new KeyValueDto(ex.getKey(), ex.getValue())
         ), HttpStatus.NOT_FOUND);
     }
 }

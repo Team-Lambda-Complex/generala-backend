@@ -6,7 +6,8 @@ import com.lambda_complex.generala.dto.request.ReqPlayerDto;
 import java.util.List;
 
 public interface IPlayerService {
-    public PlayerDto createPlayer(ReqPlayerDto reqPlayerDto);
-    public List<PlayerDto> findAll();
-    public PlayerDto findByEmailAndPassword(String email, String password);
+    PlayerDto createPlayer(ReqPlayerDto reqPlayerDto);
+    List<PlayerDto> findAll();
+    PlayerDto findByEmailAndPassword(String email, String password);
+    PlayerDto findById(Long id);
 }

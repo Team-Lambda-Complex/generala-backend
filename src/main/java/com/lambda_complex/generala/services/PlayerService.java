@@ -50,10 +50,17 @@ public class PlayerService implements IPlayerService {
     public PlayerDto findByEmailAndPassword(String email, String password) {
         Optional<Player> exists = playerRepository.findByEmailAndPassword(email, password);
 
-        if (exists.isEmpty()) throw new PlayerNotFoundException("Player not found");
+        if (exists.isEmpty()) throw new PlayerNotFoundException("email", email);
 
-        System.out.println(exists);
+        return mapper.map(exists.get(), PlayerDto.class);
+    }
 
-        return mapper.map(exists, PlayerDto.class);
+    @Override
+    public PlayerDto findById(Long id) {
+        Optional<Player> exists = playerRepository.findById(id);
+
+        if (exists.isEmpty()) throw new PlayerNotFoundException("id", id.toString());
+
+        return mapper.map(exists.get(), PlayerDto.class);
     }
 }
