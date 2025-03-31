@@ -2,6 +2,7 @@ package com.lambda_complex.generala.controllers;
 
 import com.lambda_complex.generala.dto.PlayerDto;
 import com.lambda_complex.generala.dto.request.ReqPlayerDto;
+import com.lambda_complex.generala.dto.response.MatchOverviewDto;
 import com.lambda_complex.generala.dto.response.SuccessResponseDto;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
 import jakarta.annotation.Nullable;
@@ -40,6 +41,18 @@ public class PlayerController {
                         true,
                         "Success",
                         playerService.findAll()
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<SuccessResponseDto<List<MatchOverviewDto>>> getAllMatches(@PathVariable Long id){
+        return new ResponseEntity<>(
+                new SuccessResponseDto<>(
+                        true,
+                        "Success",
+                        playerService.findMatchesPlayedIn(id)
                 ),
                 HttpStatus.OK
         );
