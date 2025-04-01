@@ -2,10 +2,8 @@ package com.lambda_complex.generala.controllers;
 
 import com.lambda_complex.generala.dto.PlayerDto;
 import com.lambda_complex.generala.dto.request.ReqPlayerDto;
-import com.lambda_complex.generala.dto.response.MatchOverviewDto;
 import com.lambda_complex.generala.dto.response.SuccessResponseDto;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/players")
+@RequestMapping("/api/player")
 public class PlayerController {
     private IPlayerService playerService;
     public PlayerController (IPlayerService playerService){
@@ -41,30 +39,6 @@ public class PlayerController {
                         true,
                         "Success",
                         playerService.findAll()
-                ),
-                HttpStatus.OK
-        );
-    }
-
-    @GetMapping
-    public ResponseEntity<SuccessResponseDto<List<MatchOverviewDto>>> getMatchHistory(@PathVariable Long id){
-        return new ResponseEntity<>(
-                new SuccessResponseDto<>(
-                        true,
-                        "Success",
-                        playerService.findMatchesPlayedIn(id)
-                ),
-                HttpStatus.OK
-        );
-    }
-
-    @GetMapping
-    public ResponseEntity<SuccessResponseDto<List<MatchOverviewDto>>> getOwnedMatches(@PathVariable Long id){
-        return new ResponseEntity<>(
-                new SuccessResponseDto<>(
-                        true,
-                        "Success",
-                        playerService.findMatchesOwned(id)
                 ),
                 HttpStatus.OK
         );
