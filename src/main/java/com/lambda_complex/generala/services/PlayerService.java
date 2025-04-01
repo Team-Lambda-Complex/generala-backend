@@ -88,8 +88,10 @@ public class PlayerService implements IPlayerService {
 
         return matchesPlayedIn.stream().map(m -> {
             List<MatchPlayer> players = matchPlayerRepository.findByMatch(m.getMatch());
-            List<ScoreDto> playerList = players.stream().map(p ->
-                    new ScoreDto(p.getPlayer().getName(), p.getScore())).toList();
+            List<ScoreDto> playerList = players.stream()
+                    .map(p ->
+                            new ScoreDto(p.getPlayer().getName(), p.getScore()))
+                    .toList();
             return new MatchOverviewDto(m.getId(), m.getMatch().getIsActive(), playerList);
         }).toList();
     }
@@ -104,8 +106,10 @@ public class PlayerService implements IPlayerService {
 
         return matchesOwned.stream().map(m -> {
             List<MatchPlayer> players = matchPlayerRepository.findByMatch(m);
-            List<ScoreDto> playerList = players.stream().map(p ->
-                    new ScoreDto(p.getPlayer().getName(), p.getScore())).toList();
+            List<ScoreDto> playerList = players.stream()
+                    .map(p ->
+                            new ScoreDto(p.getPlayer().getName(), p.getScore()))
+                    .toList();
             return new MatchOverviewDto(m.getId(), m.getIsActive(), playerList);
         }).toList();
     }

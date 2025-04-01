@@ -1,14 +1,13 @@
 package com.lambda_complex.generala.controllers;
 
+import com.lambda_complex.generala.dto.request.NewMatchDto;
 import com.lambda_complex.generala.dto.response.MatchOverviewDto;
 import com.lambda_complex.generala.dto.response.SuccessResponseDto;
+import com.lambda_complex.generala.services.interfaces.IMatchService;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,8 +15,10 @@ import java.util.List;
 @RequestMapping("/api/match")
 public class MatchController {
     private IPlayerService playerService;
-    public MatchController (IPlayerService playerService){
+    private IMatchService matchService;
+    public MatchController (IPlayerService playerService, IMatchService matchService){
         this.playerService = playerService;
+        this.matchService = matchService;
     }
 
     @GetMapping("/{id}")
@@ -41,6 +42,19 @@ public class MatchController {
                         playerService.findMatchesOwned(id)
                 ),
                 HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/admin/{id}")
+    public ResponseEntity<SuccessResponseDto<MatchOverviewDto>> createMatch(@PathVariable Long id,
+                                                                            @RequestBody NewMatchDto newMatchDto){
+        return new ResponseEntity<>(
+                new SuccessResponseDto<>(
+                        true,
+                        "Match successfully created",
+                        matchService.createMatch(newMatchDto, id)
+                ),
+                HttpStatus.CREATED
         );
     }
 }
