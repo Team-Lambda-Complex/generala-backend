@@ -57,4 +57,17 @@ public class MatchController {
                 HttpStatus.CREATED
         );
     }
+
+    @PutMapping("/admin/{id}/{matchId}")
+    public ResponseEntity<SuccessResponseDto<MatchOverviewDto>> createMatch(@PathVariable Long id,
+                                                                            @PathVariable Long matchId){
+        return new ResponseEntity<>(
+                new SuccessResponseDto<>(
+                        true,
+                        "Match successfully ended",
+                        matchService.endMatch(matchId, id)
+                ),
+                HttpStatus.OK
+        );
+    }
 }
