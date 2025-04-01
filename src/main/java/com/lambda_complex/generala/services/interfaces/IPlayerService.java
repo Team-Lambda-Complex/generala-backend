@@ -12,4 +12,5 @@ public interface IPlayerService {
     PlayerDto findByEmailAndPassword(String email, String password);
     PlayerDto findById(Long id);
     List<MatchOverviewDto> findMatchesPlayedIn(Long id);
+    List<MatchOverviewDto> findMatchesOwned(Long id);
 }

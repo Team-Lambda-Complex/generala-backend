@@ -12,6 +12,7 @@ import java.util.List;
 public class MatchOverviewDto {
 
     private Long id;
+    private Boolean active;
     private List<ScoreDto> players;
 
 }

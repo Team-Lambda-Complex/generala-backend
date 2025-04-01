@@ -47,12 +47,24 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<SuccessResponseDto<List<MatchOverviewDto>>> getAllMatches(@PathVariable Long id){
+    public ResponseEntity<SuccessResponseDto<List<MatchOverviewDto>>> getMatchHistory(@PathVariable Long id){
         return new ResponseEntity<>(
                 new SuccessResponseDto<>(
                         true,
                         "Success",
                         playerService.findMatchesPlayedIn(id)
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<SuccessResponseDto<List<MatchOverviewDto>>> getOwnedMatches(@PathVariable Long id){
+        return new ResponseEntity<>(
+                new SuccessResponseDto<>(
+                        true,
+                        "Success",
+                        playerService.findMatchesOwned(id)
                 ),
                 HttpStatus.OK
         );

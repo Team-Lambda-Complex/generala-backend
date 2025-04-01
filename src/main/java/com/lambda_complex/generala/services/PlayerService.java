@@ -4,18 +4,19 @@ import com.lambda_complex.generala.dto.PlayerDto;
 import com.lambda_complex.generala.dto.request.ReqPlayerDto;
 import com.lambda_complex.generala.dto.response.MatchOverviewDto;
 import com.lambda_complex.generala.dto.response.ScoreDto;
+import com.lambda_complex.generala.entities.Match;
 import com.lambda_complex.generala.entities.MatchPlayer;
 import com.lambda_complex.generala.entities.Player;
 import com.lambda_complex.generala.exceptions.EmailAlreadyExistsException;
 import com.lambda_complex.generala.exceptions.PlayerNotFoundException;
 import com.lambda_complex.generala.repositories.interfaces.IMatchPlayerRepository;
+import com.lambda_complex.generala.repositories.interfaces.IMatchRepository;
 import com.lambda_complex.generala.repositories.interfaces.IPlayerRepository;
 import com.lambda_complex.generala.services.interfaces.IPlayerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,10 +24,15 @@ import java.util.Optional;
 public class PlayerService implements IPlayerService {
     private IPlayerRepository playerRepository;
     private IMatchPlayerRepository matchPlayerRepository;
+    private IMatchRepository matchRepository;
 
-    public PlayerService(IPlayerRepository playerRepository, IMatchPlayerRepository matchPlayerRepository){
+    public PlayerService(
+            IPlayerRepository playerRepository,
+            IMatchPlayerRepository matchPlayerRepository,
+            IMatchRepository matchRepository){
         this.playerRepository = playerRepository;
         this.matchPlayerRepository = matchPlayerRepository;
+        this.matchRepository = matchRepository;
     }
 
     @Autowired
@@ -84,7 +90,23 @@ public class PlayerService implements IPlayerService {
             List<MatchPlayer> players = matchPlayerRepository.findByMatch(m.getMatch());
             List<ScoreDto> playerList = players.stream().map(p ->
                     new ScoreDto(p.getPlayer().getName(), p.getScore())).toList();
-            return new MatchOverviewDto(m.getId(), playerList);
+            return new MatchOverviewDto(m.getId(), m.getMatch().getIsActive(), playerList);
+        }).toList();
+    }
+
+    @Override
+    public List<MatchOverviewDto> findMatchesOwned(Long id) {
+        Optional<Player> exists = playerRepository.findById(id);
+
+        if (exists.isEmpty()) throw new PlayerNotFoundException("id", id.toString());
+
+        List<Match> matchesOwned = matchRepository.findByOwner(exists.get());
+
+        return matchesOwned.stream().map(m -> {
+            List<MatchPlayer> players = matchPlayerRepository.findByMatch(m);
+            List<ScoreDto> playerList = players.stream().map(p ->
+                    new ScoreDto(p.getPlayer().getName(), p.getScore())).toList();
+            return new MatchOverviewDto(m.getId(), m.getIsActive(), playerList);
         }).toList();
     }
 }
